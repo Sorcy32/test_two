@@ -7,9 +7,16 @@
 >> * умножение вектора на скаляр
 >> * корректную репрезентацию вектора в виде строки
 '''
-import math
 
 class Vector():
+    '''
+    Класс для работы с векторами. Имеет функции:
+    value() - Отображает значения X, Y
+    Сложения/Вычитания ( + / - ) - складывает и вычитае векторы
+    module() - Вычисление модуля (длины) вектора
+    scal (x)- Умножение вектора на скаляр. x - скаляр
+    repr() - Репрезентация в виде строки
+    '''
     def __init__(self, x, y):
         '''Constructor'''
         self.x = x
@@ -28,24 +35,16 @@ class Vector():
         return Vector(self.x - other.x, self.y - other.y)
 
     def module(self):
-        '''Вычисление модуля'''
+        '''Вычисление модуля (длина вектора)'''
         # |a| = √ax2 + ay2 | Корень квадратный = z в степени 0.5
         return ((self.x**2) + (self.y**2))**0.5
 
-    def scal(self):
+    def scal(self, scal):
         '''Умножение вектора на скаляр'''
+        if scal < 0:
+            scal = abs(scal)
+        return self.module() * scal
 
-
-
-
-
-
-
-#тесты
-a = Vector(2, 4)
-b = Vector(1, 3)
-print(a)
-c = a+b
-print('valueeees', c.value())
-print(c.x , c.y)
-print('модуль' , a.module())
+    def repr(self):
+        '''Репрезентация вектора в виде строки'''
+        return str('x = {0}, y = {1}') .format(self.x, self.y)
