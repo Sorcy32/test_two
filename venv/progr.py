@@ -1,0 +1,74 @@
+# -*- coding: utf-8 -*-
+'''
+Написать программу, которая
+#1. принимает на вход в качестве именованного аргумента —input (-i) путь до считываемого файла
+в формате <filename>.csv, в качестве второго аргумента  - —output (-o) - путь до целевого файла <filename>_odd.csv,
+Нет инфы про возможные типы путей. будем выкручиваться.
+#2. сама программа считывает .csv,
+#3. оставляет только нечетные строки,
+#4. записывает их в целевой файл.
+#5. Если в файле ноль нечетных строк, целевой файл не создается, программа предупреждает об ошибке.
+#6. Если недостаточно аргументов / не хватает файлов по указанному пути - программа сообщает об ошибке.
+'''
+import argparse, csv, os
+
+def main():
+    #Получаем список необходимых переданных аргументовю Сохраняем в args
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', type=str, help='Путь до считываемого файла в формате <filename>.csv')
+    parser.add_argument('-o', '--output', type=str, help='Путь до целевого файла в формате <filename>_odd.csv')
+    args = parser.parse_args()
+
+    #Проверяем передали ли нам все необходимые аргументы (input & output)
+    if args.input == None or args.output == None:
+        print('Не хватает входящих аргументов. Для получения справки используйте --help')
+        os._exit(0)
+
+    #Проверка наличия существования сходного файла. Выходной проверять не будем. Он создается при необходимости
+    if os.path.exists(args.input) == False:
+        print(('Указанный входящий файл для импорта не сушествует'))
+        os._exit(0)
+
+    if os.path.dirname(args.output[0:-4]) != True:
+        try:
+            os.makedirs(os.path.dirname(args.output[0:-4]))
+        except FileExistsError:
+            pass
+    return args.input, args.output
+
+
+def sort_save(input_path, output_path):
+    #Считываем четные строки входного файла, сохраняем в data_to_save
+    try:
+        with open (input_path, newline='', encoding='utf-8') as imported_file:
+            counter=1
+            data_to_save=[]
+            reader = csv.reader(imported_file, quotechar='|', delimiter=',')
+            for row in reader:
+                if counter%2 != 0:
+                    data_to_save.append(row)
+                counter+=1
+    except:
+        (print('Ошибка при чтении файла'))
+        os._exit(0)
+
+    #Проверяем не равно ли количество четных строк нулю
+    if len(data_to_save)==0:
+         print('Нечетных строк ноль!') #Если равно нулю = следующий блок с созданием файла не сработает
+         os._exit(0)
+    #Если не равно нулю - записываем в выходной файл
+    else:
+        try:
+            with open (output_path, 'w', newline='', encoding='utf-8') as out_file:
+                writer = csv.writer(out_file)
+                writer.writerows(data_to_save)
+        except:
+            print('Ошибка при записи файла')
+            os._exit(0)
+    return output_path
+
+if __name__ == "__main__":
+    input_path , output_path = main()
+    sort_save(input_path,output_path)
+
+print('Выполнено.  Можно открыть файл ' , output_path)
