@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 '''
 Написать программу, которая
 #1. принимает на вход в качестве именованного аргумента —input (-i) путь до считываемого файла
@@ -14,19 +16,19 @@ import argparse, csv, os
 def main():
     #Получаем список необходимых переданных аргументовю Сохраняем в args
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--input', type=str, help='Path for file to import. Should be <filename>.csv')
-    parser.add_argument('-o', '--output', type=str, help='path for output file. Should be <filename>_odd.csv')
+    parser.add_argument('-i', '--input', type=str, help='Путь до считываемого файла в формате <filename>.csv')
+    parser.add_argument('-o', '--output', type=str, help='Путь до целевого файла в формате <filename>_odd.csv')
     args = parser.parse_args()
 
     #Проверяем передали ли нам все необходимые аргументы (input & output)
     if args.input == None or args.output == None:
-        print('Не хватает входящих аргументов')
+        print('Не хватает входящих аргументов. Для получения справки используйте --help')
         os._exit(0)
 
     # Проверка передали ли путь к файлу с расширением или без, верно ли указан output_odd.csv
     try:
         if args.input.rsplit('.')[1] != 'csv':    #попытка получить расширение файла
-            (print("Расширение файла импорта должно быть CSV"))
+            print("Расширение файла импорта должно быть CSV")
             os._exit(0)
     except IndexError: #если расширение не указано - присвоим
         args.input = args.input + '.csv'
