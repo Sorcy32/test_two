@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
 >> Реализовать класс Vector на Python, реализующий работу с векторами на плоскости, поддерживающий следующие операции:
->>
 >> * сложение и вычитание векторов
 >> * вычисление модуля вектора
 >> * умножение вектора на скаляр
@@ -18,8 +17,12 @@ class Vector():
     '''
     def __init__(self, x, y):
         '''Constructor'''
+        types = [int, float]
+        if type(x) not in types or type(y) not in types:
+            raise TypeError
         self.x = x
         self.y = y
+
 
     def value(self):
         '''Вернет значения X и Y'''
@@ -39,11 +42,11 @@ class Vector():
         return ((self.x**2) + (self.y**2))**0.5
 
     def scal(self, scal):
-        '''Умножение вектора на скаляр'''
-        if scal < 0:
-            scal = abs(scal)
-        return self.module() * scal
+        '''Умножение вектора на скаляр. Функция вернет вектор'''
+        return Vector((scal * self.x) , (scal * self.y))
 
     def repr(self):
         '''Репрезентация вектора в виде строки'''
         return str('x = {0}, y = {1}') .format(self.x, self.y)
+
+
